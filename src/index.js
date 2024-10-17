@@ -104,7 +104,7 @@ app.use('/api/cliente', require('./rutas/rutasCliente'));
 app.use('/api/clienteDireccion', require('./rutas/rutasClienteDireccion'));
 app.use('/api/clienteTelefono', require('./rutas/rutasClienteTelefono'));
 app.use('/api/empleado', require('./rutas/rutasEmpleado'));
-app.listen(process.env.PORT, ()=>{
-    console.log('Servidor iniciado en el puerto ' + process.env.PORT);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.listen(process.env.PORT || 3001, () => {
+    console.log('Servidor iniciado en el puerto ' + (process.env.PORT || 3001));
 });
-
