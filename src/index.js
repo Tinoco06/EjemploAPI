@@ -24,6 +24,7 @@ const modeloBarrio = require('./modelos/ubicacion/barrio');
 const modeloCliente = require('./modelos/cliente');
 const modeloClienteTelefono = require('./modelos/clienteTelefono');
 const modeloClienteDireccion = require('./modelos/ubicacion/clienteDireccion');
+const modeloUsuario =  require('./modelos/usuario');
 
 db.authenticate()
 //async es para ejecutarse de forma asincrona
@@ -31,6 +32,8 @@ db.authenticate()
     console.log("Conexion correcta con la base de datos");
     modeloCargo.hasMany(modeloEmpleado);
     modeloEmpleado.belongsTo(modeloCargo);
+    modeloUsuario.hasMany(modeloEmpleado);
+    modeloEmpleado.belongsTo(modeloUsuario);
 
     modeloDepartamanto.hasMany(modeloMunicipio);
     modeloMunicipio.belongsTo(modeloDepartamanto);
@@ -45,9 +48,14 @@ db.authenticate()
     modeloClienteDireccion.belongsTo(modeloCliente);
     modeloBarrio.hasMany(modeloClienteDireccion);
     modeloClienteDireccion.belongsTo(modeloBarrio);
+    modeloUsuario.hasMany(modeloCliente);
+    modeloCliente.belongsTo(modeloUsuario);
 
     await modeloCargo.sync().then((data)=>{
         console.log("Modelo cargo creado correctamente");
+    });
+    await modeloUsuario.sync().then((data)=>{
+        console.log("Modelo usuario creado correctamente");
     });
     await modeloEmpleado.sync().then((data)=>{
         console.log("Modelo empleado creado correctamente");
@@ -104,6 +112,7 @@ app.use('/api/cliente', require('./rutas/rutasCliente'));
 app.use('/api/clienteDireccion', require('./rutas/rutasClienteDireccion'));
 app.use('/api/clienteTelefono', require('./rutas/rutasClienteTelefono'));
 app.use('/api/empleado', require('./rutas/rutasEmpleado'));
+app.use('/api/usuarios', require('./rutas/rutasUsuario'));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.listen(process.env.PORT || 3001, () => {
     console.log('Servidor iniciado en el puerto ' + (process.env.PORT || 3001));
